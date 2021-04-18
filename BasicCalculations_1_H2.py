@@ -5,21 +5,25 @@ from gpaw import GPAW
 
 # Place one H atom at point (5,5,5) in a crystal of size 10 x 10 x 10:
 
-atoms = Atoms('H', positions=[(5,5,5)], cell=(10,10,10))
+atoms = Atoms('H', positions=[(5, 5, 5)], cell=(10, 10, 10))
 
 # Place one H2 molecule, where one H is at (5-0.35,5,5) and the other is at (5+0.35,5,5) in a crystal of size 10 x 10 x 10. Here, the list of positions of atoms go into positions. Note that: here, positions becomes a list of tuples
 
-atoms = Atoms('H2', positions=[(5-0.35,5,5),(5+0.35,5,5)], cell=(10,10,10))
+atoms = Atoms('H2', positions=[(5-0.35, 5, 5),
+                               (5+0.35, 5, 5)], cell=(10, 10, 10))
 
 # and it can also be a list of lists
 
-atoms = Atoms('H2', positions=[[-0.35,0,0],[0.35,0,0]], cell=(10,10,10))
+atoms = Atoms('H2', positions=[[5-0.35, 5, 5],
+                               [5+0.35, 5, 5]], cell=(10, 10, 10))
 
 # Let' use functions to get properties of the system
 
+atoms.get_positions()
+
 atoms.get_chemical_symbols()
 
-atoms.get_distance(0,1)
+atoms.get_distance(0, 1)
 
 atoms.get_initial_charges()
 
@@ -35,21 +39,23 @@ atoms.get_volume()
 
 atoms.get_cell_lengths_and_angles()
 
-# Now let's use variables for more compact according
+# Now let's use variables for more compact notation
 
 a = 10
 d = 0.74
 
-atoms = Atoms('H2', positions=[[a/2-d/2,a/2,a/2],[a/2+d/2,a/2,a/2]], cell=(a,a,a))
+atoms = Atoms('H2', positions=[[a/2-d/2, a/2, a/2],
+                               [a/2+d/2, a/2, a/2]], cell=(a, a, a))
 
 # Next, we need to create a calculator object
 
 # Calculation of the atomization energy
-# This is the energy of splitting all atoms in the molecule into isolated atoms. So it quantifies the stength of the bond(s) in the molecule
+# This is the energy of splitting all atoms in the molecule into isolated atoms.
+# So it quantifies the stength of the bond(s) in the molecule.
 
 # First let's calculate the total energy of a single H atom
 
-H = Atoms('H', positions=[(a/2,a/2,a/2)], cell=(a,a,a))
+H = Atoms('H', positions=[(a/2, a/2, a/2)], cell=(a, a, a))
 
 # Then create the calculator
 
@@ -63,7 +69,8 @@ print(e)
 
 # Second, we calculate the total energy of H2
 
-H2 = Atoms('H2', positions=[[a/2-d/2,a/2,a/2],[a/2+d/2,a/2,a/2]], cell=(a,a,a))
+H2 = Atoms('H2', positions=[[a/2-d/2, a/2, a/2],
+                            [a/2+d/2, a/2, a/2]], cell=(a, a, a))
 H2.set_calculator(calc)
 eTotal = H2.get_potential_energy()
 print(eTotal)
@@ -79,7 +86,9 @@ print(eTotal-2*e)
 # Check this out: the spin of the single H atom is zero, but this doesn't make sense!
 H.get_magnetic_moments()
 
-# To fix this, we need to
+# To fix this, we need to apply Hund's rule on the H atom
+
+# Note: Hund rule setting is only valid for single atoms
 
 calc_HundRule = GPAW(hund=True)
 H.set_calculator(calc_HundRule)
@@ -94,9 +103,7 @@ print(eTotal-2*e)
 
 # There is still room for improvement: the exchange-correlation. Let's use PBE.
 
-# Note: Hund rule setting is only valid for single atoms
-
-calc_HundRule_PBE = GPAW(hund=True,xc='PBE')
+calc_HundRule_PBE = GPAW(hund=True, xc='PBE')
 H.set_calculator(calc_HundRule_PBE)
 e = H.get_potential_energy()
 calc_PBE = GPAW(xc='PBE')
