@@ -59,12 +59,12 @@ print("Slab energy with H adsorbed: ", Pt_slab_H_energy)
 # It is -24.228088785650773
 
 # Recall from BasicCalculations_1_H2.py
-H2_energy = -4.488165097141112
+H2_energy = -6.725007250781371
 
 # The adsorption energy is:
 E_ad = Pt_slab_H_energy - Pt_slab_energy - H2_energy/2
 
 print("Adsorption energy:", E_ad)
-# -1.4780994447036813
+# -0.39759964909709344
 
 # To get closer to the ~ -0.5 eV result, we need more k-points
